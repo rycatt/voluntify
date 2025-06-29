@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <main className="flex flex-col min-h-screen pt-6">
       <div className="text-center">
-        <h1 className="text-4xl font-bold">Welcome {currentUser?.displayName}!</h1>
+        <h1 className="text-4xl font-bold">Welcome {currentUser?.displayName || 'User'}!</h1>
         <p className="text-xl text-gray-700 mb-8">
           Find volunteer opportunities near you and make a difference.
         </p>

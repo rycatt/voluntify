@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import { useAuth } from '@/contexts/AuthContext';
+import Image from 'next/image';
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -48,11 +49,25 @@ export const Navbar = () => {
         <Button variant="outline" size="lg" className="cursor-pointer">
           <Plus /> Log Hours
         </Button>
-        <div className="w-10 h-10 rounded-full p-1.5 flex justify-center items-center bg-slate-200">
-          <User size={25} />
+        <div className="w-12 h-12 rounded-full p-1.5 flex justify-center items-center">
+          {currentUser?.photoURL ? (
+            <Image
+              src={currentUser?.photoURL}
+              alt="User Profile Picture"
+              width={48}
+              height={48}
+              className="rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full p-1.5 flex justify-center items-center bg-slate-200">
+              <User size={25} />
+            </div>
+          )}
         </div>
         <div>
-          <p className="font-semibold text-gray-900 text-sm">{currentUser?.displayName}</p>
+          <p className="font-semibold text-gray-900 text-sm">
+            {currentUser?.displayName || 'User'}
+          </p>
           <p className="text-gray-500 text-xs">9 hours logged</p>
         </div>
       </div>
