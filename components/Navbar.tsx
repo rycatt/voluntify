@@ -4,9 +4,11 @@ import { Calendar, ChartColumn, Plus, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from './ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const Navbar = () => {
   const pathname = usePathname();
+  const { currentUser } = useAuth();
   const hideNavbar = pathname === '/login' || pathname === '/signup';
 
   if (hideNavbar) return null;
@@ -50,7 +52,7 @@ export const Navbar = () => {
           <User size={25} />
         </div>
         <div>
-          <p className="font-semibold text-gray-900 text-sm">John Doe</p>
+          <p className="font-semibold text-gray-900 text-sm">{currentUser?.displayName}</p>
           <p className="text-gray-500 text-xs">9 hours logged</p>
         </div>
       </div>

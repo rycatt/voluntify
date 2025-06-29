@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardTitle } from '@/components/ui/card';
-import { OpportunityListProps } from '@/types';
+import { OpportunityListProps } from '@/types/opportunity';
 import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 import Image from 'next/image';
 import { Badge } from './ui/badge';

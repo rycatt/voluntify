@@ -2,27 +2,22 @@
 
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import {
+  browserLocalPersistence,
+  browserSessionPersistence,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
+  GoogleAuthProvider,
   signOut,
   User,
 } from 'firebase/auth';
 
 import { auth } from '../firebase/firebase';
-import { GoogleAuthProvider } from 'firebase/auth/web-extension';
+import { AuthContextProps } from '@/types/auth';
 
-interface AuthContextType {
-  currentUser: User | null;
-  loading: boolean;
-  signup: (email: string, password: string) => void;
-  login: (email: string, password: string) => void;
-  loginWithGoogle: () => void;
-  logout: () => void;
-}
-
-const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -44,20 +39,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const login = (email: string, password: string) => {
+  const login = async (email: string, password: string, rememberMe: boolean = false) => {
+    const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+    await setPersistence(auth, persistenceType);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const loginWithGoogle = () => {
+  const loginWithGoogle = async (rememberMe: boolean = false) => {
+    const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+    await setPersistence(auth, persistenceType);
+
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+    return await signInWithPopup(auth, provider);
   };
 
   const logout = () => {
     signOut(auth);
   };
 
-  const value = {
+  const value: AuthContextProps = {
     currentUser,
     signup,
     login,
