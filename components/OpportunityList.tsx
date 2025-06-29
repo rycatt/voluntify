@@ -1,15 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { OpportunityListProps } from "@/types";
-import { Calendar, Clock, MapPin, Users } from "lucide-react";
-import Image from "next/image";
-import { Badge } from "./ui/badge";
+import { Button } from '@/components/ui/button';
+import { Card, CardDescription, CardTitle } from '@/components/ui/card';
+import { OpportunityListProps } from '@/types';
+import { Calendar, Clock, MapPin, Users } from 'lucide-react';
+import Image from 'next/image';
+import { Badge } from './ui/badge';
 
-export const OpportunityList = ({
-  records,
-  loading,
-  error,
-}: OpportunityListProps) => {
+export const OpportunityList = ({ records, loading, error }: OpportunityListProps) => {
   if (error) {
     return <p>{error}</p>;
   }
@@ -40,7 +36,7 @@ export const OpportunityList = ({
       <p className="mb-4 font-semibold text-gray-600">
         Showing {Math.min(records.length, 6)} of {records.length} opportunities
       </p>
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-3 gap-2">
         {records.map((record) => {
           const {
             Title,
@@ -50,7 +46,7 @@ export const OpportunityList = ({
             Date,
             Duration,
             Participants,
-            "Max Participants": MaxParticipants,
+            'Max Participants': MaxParticipants,
             Thumbnail,
           } = record.fields;
 
@@ -69,12 +65,8 @@ export const OpportunityList = ({
               )}
               <div className="flex-1">
                 <div>
-                  <CardTitle className="text-xl font-bold line-clamp-2">
-                    {Title}
-                  </CardTitle>
-                  <CardDescription className="text-md font-medium">
-                    {Organization}
-                  </CardDescription>
+                  <CardTitle className="text-xl font-bold line-clamp-2">{Title}</CardTitle>
+                  <CardDescription className="text-md font-medium">{Organization}</CardDescription>
                 </div>
 
                 <p className="my-4">{Description}</p>

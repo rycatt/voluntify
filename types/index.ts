@@ -16,13 +16,13 @@ export interface ImageAttachment {
 export interface OpportunityRecordFields {
   Title: string;
   Description: string;
-  "Event ID": number;
+  'Event ID': number;
   Organization: string;
   Location: string;
   Date: string;
   Duration: string;
   Participants: number;
-  "Max Participants": number;
+  'Max Participants': number;
   Thumbnail: ImageAttachment[] | undefined;
 }
 
