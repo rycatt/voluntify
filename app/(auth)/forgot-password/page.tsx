@@ -2,7 +2,7 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/firebase/firebase';
-import { fetchSignInMethodsForEmail, sendPasswordResetEmail } from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import { FormEvent, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -21,13 +21,6 @@ export default function ForgotPasswordPage() {
 
     console.log('Email:', email);
     try {
-      const methods = await fetchSignInMethodsForEmail(auth, email);
-      console.log('Sign-in methods:', methods);
-      if (methods.length === 0) {
-        setError('This email is not registered.');
-        return;
-      }
-
       await sendPasswordResetEmail(auth, email);
       setMessage('Password reset email sent.');
     } catch {
@@ -48,7 +41,7 @@ export default function ForgotPasswordPage() {
           {message && (
             <Alert variant="default">
               <AlertTitle>{message}</AlertTitle>
-              <AlertDescription> Please check your inbox.</AlertDescription>
+              <AlertDescription> didn&apos;t get it? Peek in your spam folder!</AlertDescription>
             </Alert>
           )}
           {error && (
