@@ -1,16 +1,24 @@
 "use client";
 
-import { Calendar, ChartColumn, User } from "lucide-react";
+import { Calendar, ChartColumn, Plus, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
 
 export const Navbar = () => {
   const pathname = usePathname();
 
   return (
-    <div className="flex justify-between items-center px-12 py-6 space-x-8">
-      <h1 className="text-2xl font-bold text-gray-900">Voluntify</h1>
-      <div className="flex">
+    <div className="grid grid-cols-3 items-center py-3">
+      <div className="flex justify-start">
+        <Link
+          href="/"
+          className="text-4xl font-bold  cursor-pointer text-blue-500"
+        >
+          Voluntify
+        </Link>
+      </div>
+      <div className="flex items-center justify-center space-x-1">
         <Link
           href="/"
           className={`flex justify-center items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
@@ -34,7 +42,10 @@ export const Navbar = () => {
           <span>Opportunities</span>
         </Link>
       </div>
-      <div className="flex items-center space-x-3 cursor-pointer hover:bg-gray-200/70 rounded-lg px-3 py-2 transition-colors">
+      <div className="flex items-center justify-end space-x-3">
+        <Button variant="outline" size="lg" className="cursor-pointer">
+          <Plus /> Log Hours
+        </Button>
         <div className="w-10 h-10 rounded-full p-1.5 flex justify-center items-center bg-slate-200">
           <User size={25} />
         </div>
