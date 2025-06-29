@@ -104,12 +104,15 @@ export default function LoginPage() {
                   Remember me
                 </Label>
               </div>
-              <Link href="/signup" className="text-blue-500 font-semibold">
+              <Link
+                href="/forgot-password"
+                className="text-blue-500 font-semibold hover:text-blue-300"
+              >
                 Forgot password?
               </Link>
             </div>
             <Button
-              className="w-full bg-blue-500 py-6 text-md cursor-pointer"
+              className="w-full bg-blue-500 py-6 text-md cursor-pointer hover:bg-blue-400"
               onClick={handleEmailLogin}
               disabled={loading}
             >
@@ -166,7 +169,7 @@ export default function LoginPage() {
         <CardFooter>
           <div className="w-full text-center text-muted-foreground">
             Don&apos;t have an account?{' '}
-            <Link href="/signup" className="underline text-blue-500">
+            <Link href="/signup" className="underline text-blue-500 hover:text-blue-400">
               Sign up
             </Link>
           </div>

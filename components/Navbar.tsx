@@ -10,7 +10,8 @@ import Image from 'next/image';
 export const Navbar = () => {
   const pathname = usePathname();
   const { currentUser } = useAuth();
-  const hideNavbar = pathname === '/login' || pathname === '/signup';
+  const hideNavbar =
+    pathname === '/login' || pathname === '/signup' || pathname === '/forgot-password';
 
   if (hideNavbar) return null;
 

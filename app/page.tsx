@@ -4,9 +4,18 @@ import { VolunteerHoursChart } from '@/components/Volunteer/VolunteerHoursChart'
 import { VolunteerStats } from '@/components/Volunteer/VolunteerStats';
 import { useAuth } from '@/contexts/AuthContext';
 import { Calendar, Clock, TrendingUp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function HomePage() {
   const { currentUser } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.replace('/login');
+    }
+  }, [currentUser, router]);
 
   return (
     <main className="flex flex-col min-h-screen pt-6">
