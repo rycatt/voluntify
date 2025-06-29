@@ -1,6 +1,6 @@
-import { ActivityFeed } from "@/components/ActivityFeed";
-import { VolunteerHoursChart } from "@/components/VolunteerHoursChart";
-import { VolunteerStats } from "@/components/VolunteerStats";
+import { ActivityFeed } from "@/components/Activity/ActivityFeed";
+import { VolunteerHoursChart } from "@/components/Volunteer/VolunteerHoursChart";
+import { VolunteerStats } from "@/components/Volunteer/VolunteerStats";
 import { Calendar, Clock, TrendingUp } from "lucide-react";
 
 export default function Home() {
