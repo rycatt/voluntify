@@ -9,7 +9,7 @@ export default function Home() {
       <div className="text-center">
         <h1 className="text-4xl font-bold">Welcome!</h1>
         <p className="text-xl text-gray-700 mb-8">
-          Find volunteer hours near you and make a difference.
+          Find volunteer opportunities near you and make a difference.
         </p>
       </div>
 

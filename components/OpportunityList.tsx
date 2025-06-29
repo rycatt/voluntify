@@ -3,6 +3,7 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { OpportunityListProps } from "@/types";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import Image from "next/image";
+import { Badge } from "./ui/badge";
 
 export const OpportunityList = ({
   records,
@@ -53,6 +54,8 @@ export const OpportunityList = ({
             Thumbnail,
           } = record.fields;
 
+          const spotsAvailable = MaxParticipants - Participants;
+
           return (
             <Card key={record.id} className="p-4 max-w-xl mx-auto">
               {Thumbnail?.[0] && (
@@ -65,26 +68,39 @@ export const OpportunityList = ({
                 />
               )}
               <div className="flex-1">
-                <CardTitle className="text-2xl">{Title}</CardTitle>
-                <CardDescription className="text-md">
-                  {Organization}
-                </CardDescription>
+                <div>
+                  <CardTitle className="text-xl font-bold line-clamp-2">
+                    {Title}
+                  </CardTitle>
+                  <CardDescription className="text-md font-medium">
+                    {Organization}
+                  </CardDescription>
+                </div>
+
                 <p className="my-4">{Description}</p>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <MapPin className="h-4 w-4" />
-                  <span>{Location}</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Calendar className="h-4 w-4" />
-                  <span>{Date}</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Clock className="h-4 w-4" />
-                  <span>{Duration}</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Users className="h-4 w-4" />
-                  <span>{MaxParticipants - Participants} spots available</span>
+
+                <div className="space-y-2 text-md">
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <MapPin className="h-4 w-4" />
+                    <span>{Location}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Calendar className="h-4 w-4" />
+                    <span>{Date}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Clock className="h-4 w-4" />
+                    <span>{Duration}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Users className="h-4 w-4" />
+                    <span>{spotsAvailable} spots available</span>
+                    {spotsAvailable <= 3 && spotsAvailable > 0 && (
+                      <Badge className="bg-orange-100 text-orange-800 border-0 text-xs">
+                        Almost Full
+                      </Badge>
+                    )}
+                  </div>
                 </div>
               </div>
               <Button className="cursor-pointer bg-blue-500 hover:bg-blue-400 py-6 text-xl">
