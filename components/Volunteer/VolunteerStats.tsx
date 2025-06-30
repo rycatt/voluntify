@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 interface VolunteerStatsProps {
   title: string;
@@ -7,7 +7,12 @@ interface VolunteerStatsProps {
   bgColor: string;
 }
 
-export const VolunteerStats = ({ title, value, icon, bgColor }: VolunteerStatsProps) => {
+export const VolunteerStats = ({
+  title,
+  value,
+  icon,
+  bgColor,
+}: VolunteerStatsProps) => {
   return (
     <div
       className={`flex items-center justify-between space-x-12 px-10 py-4 rounded-3xl ${bgColor}`}

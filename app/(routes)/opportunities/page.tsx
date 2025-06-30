@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { LogHours } from '@/components/LogHours';
-import { OpportunityList } from '@/components/OpportunityList';
-import { Input } from '@/components/ui/input';
-import { OpportunityRecord } from '@/types/opportunity';
-import { Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { LogHours } from "@/components/LogHours";
+import { OpportunityList } from "@/components/OpportunityList";
+import { Input } from "@/components/ui/input";
+import { OpportunityRecord } from "@/types/opportunity";
+import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [records, setRecords] = useState<OpportunityRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +21,9 @@ export default function Page() {
     const fetchOpportunities = async () => {
       try {
         const res = await fetch(
-          `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME!)}`,
+          `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(
+            TABLE_NAME!
+          )}`,
           { headers: { Authorization: `Bearer ${PERSONAL_ACCESS_TOKEN}` } }
         );
 
@@ -36,7 +38,7 @@ export default function Page() {
         if (err instanceof Error) {
           setError(`Can't load opportunities: ${err.message}`);
         } else {
-          setError('Something went wrong loading opportunities');
+          setError("Something went wrong loading opportunities");
         }
       } finally {
         setLoading(false);
@@ -45,9 +47,8 @@ export default function Page() {
     fetchOpportunities();
   }, [PERSONAL_ACCESS_TOKEN, BASE_ID, TABLE_NAME]);
 
-  // Filter opportunities based on the user's search
   const filteredRecords = records.filter((record) => {
-    if (query.trim() === '') return true;
+    if (query.trim() === "") return true;
     return record.fields.Title.toLowerCase().includes(query.toLowerCase());
   });
 
@@ -62,7 +63,10 @@ export default function Page() {
 
       <form className="flex flex-col max-w-4xl p-4">
         <div className="flex gap-4 items-center relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+            size={20}
+          />
           <Input
             placeholder="Search opportunities..."
             onChange={(e) => setQuery(e.target.value)}
@@ -72,7 +76,11 @@ export default function Page() {
         </div>
       </form>
 
-      <OpportunityList records={filteredRecords} loading={loading} error={error} />
+      <OpportunityList
+        records={filteredRecords}
+        loading={loading}
+        error={error}
+      />
     </div>
   );
 }

@@ -85,7 +85,7 @@ export const OpportunityList = ({
       <p className="mb-4 font-semibold text-gray-600">
         Showing {Math.min(records.length, 6)} of {records.length} opportunities
       </p>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
         {records.map((record) => {
           const {
             Title,
