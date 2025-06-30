@@ -6,6 +6,9 @@
 html,
 body {
   height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 [data-theme='dark'] {
@@ -118,15 +121,6 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
 @layer base {

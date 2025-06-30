@@ -1,9 +1,8 @@
 'use client';
 
-import { Calendar, ChartColumn, Plus, User } from 'lucide-react';
+import { Calendar, ChartColumn, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button } from './ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
 
@@ -47,9 +46,6 @@ export const Navbar = () => {
         </Link>
       </div>
       <div className="flex items-center justify-end space-x-3">
-        <Button variant="outline" size="lg" className="cursor-pointer">
-          <Plus /> Log Hours
-        </Button>
         <div className="w-12 h-12 rounded-full p-1.5 flex justify-center items-center">
           {currentUser?.photoURL ? (
             <Image

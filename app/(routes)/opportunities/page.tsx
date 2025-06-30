@@ -1,5 +1,6 @@
 'use client';
 
+import { LogHours } from '@/components/LogHours';
 import { OpportunityList } from '@/components/OpportunityList';
 import { Input } from '@/components/ui/input';
 import { OpportunityRecord } from '@/types/opportunity';
@@ -51,19 +52,22 @@ export default function Page() {
 
   return (
     <div className="flex flex-col min-h-screen pt-6">
-      <h1 className="text-4xl font-bold mb-2">Volunteer Opportunities</h1>
-      <p className="text-gray-600 font-medium text-lg">
-        Find meaningful ways to make a difference in your community
-      </p>
+      <div>
+        <h1 className="text-4xl font-bold mb-2">Volunteer Opportunities</h1>
+        <p className="text-gray-600 font-medium text-lg">
+          Find meaningful ways to make a difference in your community
+        </p>
+      </div>
 
       <form className="flex flex-col max-w-4xl p-4">
-        <div className="relative">
+        <div className="flex gap-4 items-center relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
           <Input
             placeholder="Search opportunities..."
             onChange={(e) => setQuery(e.target.value)}
             className="pl-10"
           />
+          <LogHours records={records} />
         </div>
       </form>
 

@@ -60,7 +60,7 @@ export default function ForgotPasswordPage() {
               required
               className="py-6"
             />
-            <Button type="submit" className="w-full bg-blue-500 py-6 text-md cursor-pointer">
+            <Button type="submit" className="w-full py-6 text-md cursor-pointer">
               Send Reset Link
             </Button>
             <Link

@@ -112,7 +112,7 @@ export default function LoginPage() {
               </Link>
             </div>
             <Button
-              className="w-full bg-blue-500 py-6 text-md cursor-pointer hover:bg-blue-400"
+              className="w-full py-6 text-md cursor-pointer"
               onClick={handleEmailLogin}
               disabled={loading}
             >

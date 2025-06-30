@@ -26,10 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased px-12 py-6`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
-          <Navbar />
-          {children}
+          <div className="px-12 py-6 min-h-screen flex flex-col">
+            <Navbar />
+            {children}
+          </div>
         </AuthProvider>
       </body>
     </html>

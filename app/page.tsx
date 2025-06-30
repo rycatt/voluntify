@@ -18,21 +18,21 @@ export default function HomePage() {
   }, [currentUser, router]);
 
   return (
-    <main className="flex flex-col min-h-screen pt-6">
-      <div className="text-center">
+    <main className="flex flex-col h-full overflow-hidden">
+      <div className="flex-shrink-0 text-center pt-6 pb-4">
         <h1 className="text-4xl font-bold">Welcome {currentUser?.displayName || 'User'}!</h1>
         <p className="text-xl text-gray-700 mb-8">
           Find volunteer opportunities near you and make a difference.
         </p>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <VolunteerStats title="Total Hours" value={9} icon={<Clock size={30} />} />
-        <VolunteerStats title="Activities" value={2} icon={<Calendar size={30} />} />
-        <VolunteerStats title="Impact Score" value={77} icon={<TrendingUp size={30} />} />
+      <div className="flex-shrink-0 grid grid-cols-3 gap-6 px-6 pb-4">
+        <VolunteerStats title="Total Hours" value={0} icon={<Clock size={30} />} />
+        <VolunteerStats title="Activities" value={0} icon={<Calendar size={30} />} />
+        <VolunteerStats title="Impact Score" value={0} icon={<TrendingUp size={30} />} />
       </div>
 
-      <div className="grid grid-cols-2 gap-12">
+      <div className="grid grid-cols-2 gap-6 px-6 pb-6 ">
         <VolunteerHoursChart />
         <ActivityFeed />
       </div>
