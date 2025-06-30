@@ -24,8 +24,6 @@ export const VolunteerHoursChart = ({ logs }: { logs: { date: Date; hours: numbe
     };
   });
 
-  const currentWeekHours = weeklyData[weeklyData.length - 1].hours ?? 0;
-
   const chartConfig = {
     hours: {
       label: 'Hours',
@@ -35,7 +33,6 @@ export const VolunteerHoursChart = ({ logs }: { logs: { date: Date; hours: numbe
   return (
     <div className="flex flex-col h-full mt-12">
       <h2 className="text-2xl font-semibold mb-4">Your Volunteer Hours</h2>
-      <span>{currentWeekHours}</span>
       <div className="border rounded-lg p-4 shadow-sm">
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
           <BarChart data={weeklyData}>

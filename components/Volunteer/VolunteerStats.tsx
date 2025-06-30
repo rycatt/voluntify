@@ -10,7 +10,7 @@ interface VolunteerStatsProps {
 export const VolunteerStats = ({ title, value, icon, bgColor }: VolunteerStatsProps) => {
   return (
     <div
-      className={`flex items-center justify-between space-x-12 px-10 py-4 rounded-3xl cursor-pointer ${bgColor}`}
+      className={`flex items-center justify-between space-x-12 px-10 py-4 rounded-3xl ${bgColor}`}
     >
       <div className="bg-white p-3 rounded-full">{icon}</div>
       <div>
