@@ -4,11 +4,22 @@ import { OpportunityListProps } from '@/types/opportunity';
 import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 import Image from 'next/image';
 import { Badge } from './ui/badge';
+import { useState } from 'react';
 
 export const OpportunityList = ({ records, loading, error }: OpportunityListProps) => {
+  const [registeredIds, setRegisteredIds] = useState<string[]>([]);
+
   if (error) {
     return <p>{error}</p>;
   }
+
+  const handleSignUp = (id: string) => {
+    setRegisteredIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      } else return [...prev, id];
+    });
+  };
 
   if (loading) {
     return (
@@ -51,6 +62,7 @@ export const OpportunityList = ({ records, loading, error }: OpportunityListProp
           } = record.fields;
 
           const spotsAvailable = MaxParticipants - Participants;
+          const isSignedUp = registeredIds.includes(record.id);
 
           return (
             <Card key={record.id} className="p-4 max-w-xl mx-auto">
@@ -95,8 +107,13 @@ export const OpportunityList = ({ records, loading, error }: OpportunityListProp
                   </div>
                 </div>
               </div>
-              <Button className="cursor-pointer bg-blue-500 hover:bg-blue-400 py-6 text-xl">
-                Sign Up
+              <Button
+                onClick={() => handleSignUp(record.id)}
+                className={`cursor-pointer py-6 text-xl ${
+                  isSignedUp ? 'bg-gray-500 hover:bg-gray-400' : 'bg-blue-500 hover:bg-blue-400'
+                }`}
+              >
+                {isSignedUp ? 'Signed Up' : 'Sign Up'}
               </Button>
             </Card>
           );
