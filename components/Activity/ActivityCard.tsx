@@ -1,13 +1,15 @@
-import { Accessibility, Dot } from 'lucide-react';
+import { VolunteerLog } from '@/types/volunteer';
+import { format } from 'date-fns';
+import { Dot, Handshake } from 'lucide-react';
 
-export const ActivityCard = () => {
+export const ActivityCard = ({ log }: { log: VolunteerLog }) => {
   return (
     <div className="flex items-center gap-4 bg-slate-200/25 px-3 py-2 rounded-lg hover:bg-slate-200/55 duration-200 transition-colors">
-      <Accessibility />
+      <Handshake />
       <div className="cursor-pointer">
-        <p className="font-semibold">Community Garden Cleanup</p>
+        <p className="font-semibold">{log.opportunity}</p>
         <span className="text-gray-600 flex items-center gap-1">
-          Jan 14, 2024 <Dot /> 4 hours
+          {format(log.date, 'MMM dd, yyyy')} <Dot /> {log.hours} hours
         </span>
       </div>
     </div>

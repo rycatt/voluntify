@@ -4,18 +4,11 @@ import { VolunteerHoursChart } from '@/components/Volunteer/VolunteerHoursChart'
 import { VolunteerStats } from '@/components/Volunteer/VolunteerStats';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/firebase/firebase';
+import { VolunteerLog } from '@/types/volunteer';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { Calendar, Clock, TrendingUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-interface VolunteerLog {
-  date: Date;
-  description: string;
-  hours: number;
-  opportunity: string;
-  reflection: string;
-}
 
 export default function HomePage() {
   const { currentUser } = useAuth();
@@ -79,7 +72,7 @@ export default function HomePage() {
 
       <div className="grid grid-cols-2 gap-6 px-6 pb-6 ">
         <VolunteerHoursChart logs={logs} />
-        <ActivityFeed />
+        <ActivityFeed logs={logs} />
       </div>
     </main>
   );
