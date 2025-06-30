@@ -13,18 +13,48 @@ import {
 import { Label } from './ui/label';
 import { OpportunityRecord } from '@/types/opportunity';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { DialogClose } from '@radix-ui/react-dialog';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/firebase/firebase';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
-  const [open, setOpen] = useState(false);
+  const { currentUser } = useAuth();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
+  const [hours, setHours] = useState('');
+  const [opportunity, setOpportunity] = useState('');
+  const [description, setDescription] = useState('');
+  const [reflection, setReflection] = useState('');
+
+  const saveVolunteerLogs = async (e: FormEvent) => {
+    e.preventDefault();
+
+    await addDoc(collection(db, 'volunteer_logs'), {
+      userId: currentUser?.uid,
+      date,
+      description,
+      hours: Number(hours),
+      opportunity,
+      reflection,
+      createdAt: serverTimestamp(),
+    });
+
+    setHours('');
+    setDate(undefined);
+    setOpportunity('');
+    setDescription('');
+    setReflection('');
+    setDialogOpen(false);
+  };
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="lg" className="cursor-pointer">
           <Plus /> Log Hours
@@ -34,10 +64,10 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
         <DialogHeader>
           <DialogTitle>Log Volunteer Hours</DialogTitle>
         </DialogHeader>
-        <form>
+        <form onSubmit={saveVolunteerLogs}>
           <div className="flex flex-col gap-2">
             <Label className="mb-2 text-gray-600">Volunteer Opportunity</Label>
-            <Select>
+            <Select onValueChange={(value) => setOpportunity(value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select an opportunity" />
               </SelectTrigger>
@@ -61,7 +91,7 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
                     Date
                   </Label>
                 </div>
-                <Popover open={open} onOpenChange={setOpen}>
+                <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <PopoverTrigger asChild>
                     <Button variant="outline" id="date" className="w-48 justify-between">
                       {date ? date.toLocaleDateString() : 'Select Date'}
@@ -75,7 +105,7 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
                       captionLayout="dropdown"
                       onSelect={(date) => {
                         setDate(date);
-                        setOpen(false);
+                        setCalendarOpen(false);
                       }}
                     />
                   </PopoverContent>
@@ -86,7 +116,7 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
                   <Clock size={18} />
                   <Label className="px-1">Hours Logged</Label>
                 </div>
-                <Input type="number" required />
+                <Input type="number" onChange={(e) => setHours(e.target.value)} required />
               </div>
             </div>
 
@@ -102,6 +132,7 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
                   id="description"
                   placeholder="Describe what you did during your volunteer work..."
                   className="resize-none h-24"
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
               <div>
@@ -115,6 +146,7 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
                   id="reflection"
                   placeholder="How did this experience impact you? What did you learn? How did it make you feel?"
                   className="resize-none h-24"
+                  onChange={(e) => setReflection(e.target.value)}
                 />
               </div>
             </div>

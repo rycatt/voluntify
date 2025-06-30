@@ -61,12 +61,6 @@ export const Navbar = () => {
             </div>
           )}
         </div>
-        <div>
-          <p className="font-semibold text-gray-900 text-sm">
-            {currentUser?.displayName || 'User'}
-          </p>
-          <p className="text-gray-500 text-xs">9 hours logged</p>
-        </div>
       </div>
     </div>
   );
