@@ -1,14 +1,14 @@
-'use client';
-import { ActivityFeed } from '@/components/Activity/ActivityFeed';
-import { VolunteerHoursChart } from '@/components/Volunteer/VolunteerHoursChart';
-import { VolunteerStats } from '@/components/Volunteer/VolunteerStats';
-import { useAuth } from '@/contexts/AuthContext';
-import { db } from '@/firebase/firebase';
-import { VolunteerLog } from '@/types/volunteer';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { Calendar, Clock, TrendingUp } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+"use client";
+import { ActivityFeed } from "@/components/Activity/ActivityFeed";
+import { VolunteerHoursChart } from "@/components/Volunteer/VolunteerHoursChart";
+import { VolunteerStats } from "@/components/Volunteer/VolunteerStats";
+import { useAuth } from "@/contexts/AuthContext";
+import { db } from "@/firebase/firebase";
+import { VolunteerLog } from "@/types/volunteer";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { Calendar, Clock, TrendingUp } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
   const { registerUser } = useAuth();
@@ -18,15 +18,16 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!registerUser) {
-      router.replace('/login');
+      router.replace("/login");
+      return;
     }
 
     const fetchLogs = async () => {
       try {
         setLoading(true);
         const volunteerQuery = query(
-          collection(db, 'volunteer_logs'),
-          where('userId', '==', registerUser?.uid)
+          collection(db, "volunteer_logs"),
+          where("userId", "==", registerUser.uid)
         );
         const querySnapshot = await getDocs(volunteerQuery);
         const userLogs = querySnapshot.docs.map((doc) => {
@@ -47,13 +48,36 @@ export default function HomePage() {
     fetchLogs();
   }, [registerUser, router]);
 
+  if (!registerUser) {
+    <main className="flex justify-center items-center h-full">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="animate-spin"
+      >
+        <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+      </svg>
+    </main>;
+  }
+
   const totalHours = logs.reduce((acc, log) => acc + log.hours, 0);
 
   return (
     <main className="flex flex-col h-full overflow-hidden">
       <div className="flex-shrink-0 text-center pt-6 pb-4">
-        <h1 className="text-4xl font-bold">Welcome {registerUser?.displayName || 'Volunteer'}!</h1>
-        <p className="text-xl text-gray-700 mb-8">Ready to make a difference in your community?</p>
+        <h1 className="text-4xl font-bold">
+          Welcome {registerUser?.displayName || "Volunteer"}!
+        </h1>
+        <p className="text-xl text-gray-700 mb-8">
+          Ready to make a difference in your community?
+        </p>
       </div>
 
       <div className="flex-shrink-0 grid grid-cols-3 gap-6 px-6 pb-4">
