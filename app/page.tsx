@@ -61,16 +61,19 @@ export default function HomePage() {
           title="Total Hours"
           value={totalHours}
           icon={<Clock size={30} color="blue" />}
+          bgColor="bg-blue-500"
         />
         <VolunteerStats
           title="Activities"
           value={logs.length}
-          icon={<Calendar size={30} color="orange" />}
+          icon={<Calendar size={30} color="indigo" />}
+          bgColor="bg-indigo-500"
         />
         <VolunteerStats
           title="Impact Score"
           value={totalHours * 1.5}
-          icon={<TrendingUp size={30} color="green" />}
+          icon={<TrendingUp size={30} color="cyan" />}
+          bgColor="bg-cyan-500"
         />
       </div>
 
