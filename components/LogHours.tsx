@@ -23,7 +23,7 @@ import { db } from '@/firebase/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 
 export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
-  const { currentUser } = useAuth();
+  const { registerUser } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -36,7 +36,7 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
     e.preventDefault();
 
     await addDoc(collection(db, 'volunteer_logs'), {
-      userId: currentUser?.uid,
+      userId: registerUser?.uid,
       date,
       description,
       hours: Number(hours),

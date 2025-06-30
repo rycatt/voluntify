@@ -19,7 +19,7 @@ export const VolunteerHoursChart = ({ logs }: { logs: { date: Date; hours: numbe
       .reduce((sum, log) => sum + log.hours, 0);
 
     return {
-      week: `Week ${i + 1} (${format(weekStart, 'MMM d')})`,
+      week: format(weekStart, 'MMM d'),
       hours: weekHours,
     };
   });

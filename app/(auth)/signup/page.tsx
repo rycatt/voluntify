@@ -49,8 +49,10 @@ export default function SignUpPage() {
               </AlertDescription>
             </Alert>
           )}
+
+          {/* TODO: Maybe redirect user to create their profile after sign up*/}
           <form>
-            <div className="flex flex-col gap-6 my-4">
+            <div className="flex flex-col gap-6 mt-4">
               <Input
                 id="email"
                 type="email"
@@ -73,12 +75,21 @@ export default function SignUpPage() {
                 placeholder="Retype your password"
                 onChange={(e) => setConfirmedPassword(e.target.value)}
                 required
-                className="py-6"
+                className={`py-6 ${
+                  confirmedPassword
+                    ? confirmedPassword !== password
+                      ? 'border-red-500 focus-visible:ring-red-300 bg-red-200/50'
+                      : ''
+                    : ''
+                }`}
               />
             </div>
+            {confirmedPassword && confirmedPassword !== password && (
+              <p className="text-red-500">Passwords do not match</p>
+            )}
 
             <Button
-              className="w-full bg-blue-500 py-6 text-md cursor-pointer"
+              className="w-full bg-blue-500 py-6 text-md cursor-pointer mt-6"
               onClick={handleSignup}
             >
               Sign Up

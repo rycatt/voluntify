@@ -60,7 +60,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <Card className="w-full max-w-xl px-4 py-8">
-        <CardHeader>
+        <CardHeader className="text-center">
           <CardTitle className="text-2xl md:text-4xl">Welcome back</CardTitle>
           <CardDescription className="text-md">Please enter your details</CardDescription>
         </CardHeader>
@@ -73,6 +73,8 @@ export default function LoginPage() {
               </AlertDescription>
             </Alert>
           )}
+
+          {/* TODO: Add show/hide toggle for password */}
           <form>
             <div className="flex flex-col gap-6 my-4">
               <Input

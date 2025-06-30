@@ -24,12 +24,12 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [registerUser, setRegisterUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
+      setRegisterUser(user);
       setLoading(false);
     });
     return unsubscribe;
@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const value: AuthContextProps = {
-    currentUser,
+    registerUser,
     signup,
     login,
     logout,

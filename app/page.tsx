@@ -11,42 +11,49 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function HomePage() {
-  const { currentUser } = useAuth();
+  const { registerUser } = useAuth();
   const [logs, setLogs] = useState<VolunteerLog[]>([]);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    if (!currentUser) {
+    if (!registerUser) {
       router.replace('/login');
     }
 
     const fetchLogs = async () => {
-      const q = query(collection(db, 'volunteer_logs'), where('userId', '==', currentUser?.uid));
-      const snapshot = await getDocs(q);
-      const userLogs = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          date: data.date.toDate(),
-          description: data.description,
-          hours: data.hours,
-          opportunity: data.opportunity,
-          reflection: data.reflection,
-        };
-      });
-      setLogs(userLogs);
+      try {
+        setLoading(true);
+        const volunteerQuery = query(
+          collection(db, 'volunteer_logs'),
+          where('userId', '==', registerUser?.uid)
+        );
+        const querySnapshot = await getDocs(volunteerQuery);
+        const userLogs = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            date: data.date.toDate(),
+            description: data.description,
+            hours: data.hours,
+            opportunity: data.opportunity,
+            reflection: data.reflection,
+          };
+        });
+        setLogs(userLogs);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchLogs();
-  }, [currentUser, router]);
+  }, [registerUser, router]);
 
-  const totalHours = logs.reduce((sum, log) => sum + log.hours, 0);
+  const totalHours = logs.reduce((acc, log) => acc + log.hours, 0);
 
   return (
     <main className="flex flex-col h-full overflow-hidden">
       <div className="flex-shrink-0 text-center pt-6 pb-4">
-        <h1 className="text-4xl font-bold">Welcome {currentUser?.displayName || 'Volunteer'}!</h1>
-        <p className="text-xl text-gray-700 mb-8">
-          Find volunteer opportunities near you and make a difference.
-        </p>
+        <h1 className="text-4xl font-bold">Welcome {registerUser?.displayName || 'Volunteer'}!</h1>
+        <p className="text-xl text-gray-700 mb-8">Ready to make a difference in your community?</p>
       </div>
 
       <div className="flex-shrink-0 grid grid-cols-3 gap-6 px-6 pb-4">
@@ -70,10 +77,29 @@ export default function HomePage() {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-6 px-6 pb-6 ">
-        <VolunteerHoursChart logs={logs} />
-        <ActivityFeed logs={logs} />
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center mt-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="animate-spin"
+          >
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          </svg>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-6 px-6 pb-6 ">
+          <VolunteerHoursChart logs={logs} />
+          <ActivityFeed logs={logs} />
+        </div>
+      )}
     </main>
   );
 }

@@ -18,7 +18,7 @@ export default function Page() {
   const TABLE_NAME = process.env.NEXT_PUBLIC_TABLE_NAME;
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchOpportunities = async () => {
       try {
         const res = await fetch(
           `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME!)}`,
@@ -34,17 +34,18 @@ export default function Page() {
         setRecords(data.records);
       } catch (err: unknown) {
         if (err instanceof Error) {
-          setError(err.message);
+          setError(`Can't load opportunities: ${err.message}`);
         } else {
-          setError('Unknown Error!');
+          setError('Something went wrong loading opportunities');
         }
       } finally {
         setLoading(false);
       }
     };
-    fetchData();
+    fetchOpportunities();
   }, [PERSONAL_ACCESS_TOKEN, BASE_ID, TABLE_NAME]);
 
+  // Filter opportunities based on the user's search
   const filteredRecords = records.filter((record) => {
     if (query.trim() === '') return true;
     return record.fields.Title.toLowerCase().includes(query.toLowerCase());

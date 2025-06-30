@@ -8,12 +8,13 @@ import Image from 'next/image';
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const { currentUser } = useAuth();
+  const { registerUser } = useAuth();
   const hideNavbar =
     pathname === '/login' || pathname === '/signup' || pathname === '/forgot-password';
 
   if (hideNavbar) return null;
 
+  // TODO: create a log out page
   return (
     <div className="grid grid-cols-3 items-center py-3">
       <div className="flex justify-start">
@@ -47,9 +48,9 @@ export const Navbar = () => {
       </div>
       <div className="flex items-center justify-end space-x-3">
         <div className="w-12 h-12 rounded-full p-1.5 flex justify-center items-center">
-          {currentUser?.photoURL ? (
+          {registerUser?.photoURL ? (
             <Image
-              src={currentUser?.photoURL}
+              src={registerUser?.photoURL}
               alt="User Profile Picture"
               width={48}
               height={48}

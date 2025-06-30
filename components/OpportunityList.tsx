@@ -13,7 +13,7 @@ export const OpportunityList = ({ records, loading, error }: OpportunityListProp
     return <p>{error}</p>;
   }
 
-  const handleSignUp = (id: string) => {
+  const handleVolunteerSignUp = (id: string) => {
     setRegisteredIds((prev) => {
       if (prev.includes(id)) {
         return prev.filter((item) => item !== id);
@@ -108,13 +108,14 @@ export const OpportunityList = ({ records, loading, error }: OpportunityListProp
                 </div>
               </div>
               <Button
-                onClick={() => handleSignUp(record.id)}
+                onClick={() => handleVolunteerSignUp(record.id)}
                 className={`cursor-pointer py-6 text-xl ${
                   isSignedUp ? 'bg-gray-500 hover:bg-gray-400' : 'bg-blue-500 hover:bg-blue-400'
                 }`}
               >
                 {isSignedUp ? 'Signed Up' : 'Sign Up'}
               </Button>
+              {/* TODO: Show a success pop after signup */}
             </Card>
           );
         })}
