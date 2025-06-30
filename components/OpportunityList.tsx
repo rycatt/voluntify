@@ -1,24 +1,62 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardDescription, CardTitle } from '@/components/ui/card';
-import { OpportunityListProps } from '@/types/opportunity';
-import { Calendar, Clock, MapPin, Users } from 'lucide-react';
-import Image from 'next/image';
-import { Badge } from './ui/badge';
-import { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { OpportunityListProps } from "@/types/opportunity";
+import { Calendar, Clock, MapPin, Users } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
+import { Badge } from "./ui/badge";
 
-export const OpportunityList = ({ records, loading, error }: OpportunityListProps) => {
+export const OpportunityList = ({
+  records,
+  loading,
+  error,
+}: OpportunityListProps) => {
   const [registeredIds, setRegisteredIds] = useState<string[]>([]);
+  const [participantCounts, setParticipantCount] = useState<{
+    [key: string]: number;
+  }>({});
+  const [showDialogId, setShowDialogId] = useState("");
 
   if (error) {
     return <p>{error}</p>;
   }
 
   const handleVolunteerSignUp = (id: string) => {
-    setRegisteredIds((prev) => {
-      if (prev.includes(id)) {
+    const isRegistered = registeredIds.includes(id);
+
+    if (isRegistered) {
+      setRegisteredIds((prev) => {
         return prev.filter((item) => item !== id);
-      } else return [...prev, id];
-    });
+      });
+      setParticipantCount((prev) => ({
+        ...prev,
+        [id]:
+          (prev[id] ||
+            records.find((record) => record.id === id)?.fields.Participants ||
+            0) - 1,
+      }));
+    } else {
+      setRegisteredIds((prev) => [...prev, id]);
+
+      setParticipantCount((prev) => ({
+        ...prev,
+        [id]:
+          (prev[id] ||
+            records.find((record) => record.id === id)?.fields.Participants ||
+            0) + 1,
+      }));
+      setShowDialogId(id);
+    }
   };
 
   if (loading) {
@@ -57,12 +95,13 @@ export const OpportunityList = ({ records, loading, error }: OpportunityListProp
             Date,
             Duration,
             Participants,
-            'Max Participants': MaxParticipants,
+            "Max Participants": MaxParticipants,
             Thumbnail,
           } = record.fields;
 
-          const spotsAvailable = MaxParticipants - Participants;
-          const isSignedUp = registeredIds.includes(record.id);
+          const currentParticipants =
+            participantCounts[record.id] || Participants;
+          const spotsAvailable = MaxParticipants - currentParticipants;
 
           return (
             <Card key={record.id} className="p-4 max-w-xl mx-auto">
@@ -77,8 +116,12 @@ export const OpportunityList = ({ records, loading, error }: OpportunityListProp
               )}
               <div className="flex-1">
                 <div>
-                  <CardTitle className="text-xl font-bold line-clamp-2">{Title}</CardTitle>
-                  <CardDescription className="text-md font-medium">{Organization}</CardDescription>
+                  <CardTitle className="text-xl font-bold line-clamp-2">
+                    {Title}
+                  </CardTitle>
+                  <CardDescription className="text-md font-medium">
+                    {Organization}
+                  </CardDescription>
                 </div>
 
                 <p className="my-4">{Description}</p>
@@ -107,14 +150,44 @@ export const OpportunityList = ({ records, loading, error }: OpportunityListProp
                   </div>
                 </div>
               </div>
-              <Button
-                onClick={() => handleVolunteerSignUp(record.id)}
-                className={`cursor-pointer py-6 text-xl ${
-                  isSignedUp ? 'bg-gray-500 hover:bg-gray-400' : 'bg-blue-500 hover:bg-blue-400'
-                }`}
+
+              <AlertDialog
+                open={showDialogId === record.id}
+                onOpenChange={(open) => !open && setShowDialogId("")}
               >
-                {isSignedUp ? 'Signed Up' : 'Sign Up'}
-              </Button>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    onClick={() => handleVolunteerSignUp(record.id)}
+                    className={`cursor-pointer py-6 text-xl ${
+                      registeredIds.includes(record.id)
+                        ? "bg-gray-500 hover:bg-gray-400"
+                        : "bg-blue-500 hover:bg-blue-400"
+                    }`}
+                  >
+                    {registeredIds.includes(record.id)
+                      ? "Signed Up"
+                      : "Sign Up"}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-3xl text-center">
+                      You&apos;re signed up!
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-lg text-center">
+                      You&apos;ve successfully signed up for this opportunity.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogAction
+                      onClick={() => setShowDialogId("")}
+                      className="w-full cursor-pointer"
+                    >
+                      Close
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
               {/* TODO: Show a success pop after signup */}
             </Card>
           );
