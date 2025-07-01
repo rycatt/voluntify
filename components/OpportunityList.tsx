@@ -3,15 +3,18 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { db } from "@/firebase/firebase";
 import { Opportunity } from "@/types/opportunity";
+import { format } from "date-fns";
 import {
   arrayUnion,
   collection,
   doc,
   getDocs,
+  Timestamp,
   updateDoc,
 } from "firebase/firestore";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import { useEffect, useState } from "react";
+import { CreateOpportunity } from "./CreateOpportunity";
 import { LogHours } from "./LogHours";
 import {
   AlertDialog,
@@ -39,10 +42,18 @@ export const OpportunityList = () => {
         const userSignedUpIds: string[] = [];
 
         querySnapshot.forEach((doc) => {
-          if (doc.data().signups.includes(registerUser?.uid)) {
+          const signups = doc.data().signups;
+          if (Array.isArray(signups) && signups.includes(registerUser?.uid)) {
             userSignedUpIds.push(doc.id);
           }
-          opportunityList.push({ id: doc.id, ...doc.data() } as Opportunity);
+          opportunityList.push({
+            id: doc.id,
+            ...doc.data(),
+            date:
+              doc.data().date instanceof Timestamp
+                ? doc.data().date.toDate()
+                : doc.data().date,
+          } as Opportunity);
         });
 
         console.log("Opportunity List:", opportunityList);
@@ -96,10 +107,11 @@ export const OpportunityList = () => {
         Showing {opportunities.length}{" "}
         {opportunities.length > 1 ? "opportunities" : "opportunity"}
       </p>
-      <div className="mb-4">
+      <div className="flex items-center gap-4 mb-4">
+        <CreateOpportunity />
         <LogHours opportunities={opportunities} />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {loading && (
           <div className="flex justify-center items-center mt-4">
             <svg
@@ -119,7 +131,7 @@ export const OpportunityList = () => {
           </div>
         )}
         {opportunities.map((opportunity) => (
-          <Card key={opportunity.id} className="p-4 max-w-xl mx-auto">
+          <Card key={opportunity.id} className="p-4 w-full mx-auto">
             <div className="flex-1">
               <div>
                 <CardTitle className="text-xl font-bold line-clamp-2">
@@ -139,7 +151,7 @@ export const OpportunityList = () => {
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <Calendar className="h-4 w-4" />
-                  <span>{opportunity.date}</span>
+                  <span>{format(opportunity.date, "MMMM d, yyyy")}</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <Clock className="h-4 w-4" />

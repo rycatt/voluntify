@@ -4,7 +4,7 @@ export interface Opportunity {
   description: string;
   organization: string;
   location: string;
-  date: string;
+  date: Date;
   startTime: string;
   endTime: string;
   maxParticipants: number;
