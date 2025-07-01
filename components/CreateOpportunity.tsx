@@ -60,6 +60,9 @@ export const CreateOpportunity = () => {
     setStartTime("");
     setEndTime("");
     setMaxParticipants(10);
+
+    setDialogOpen(false);
+    window.location.reload();
   };
 
   return (
