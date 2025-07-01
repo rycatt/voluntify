@@ -1,41 +1,51 @@
-import { CalendarIcon, Clock, FileText, Lightbulb, Plus } from 'lucide-react';
-import { Button } from './ui/button';
-import { Dialog, DialogHeader, DialogTitle, DialogContent, DialogTrigger } from './ui/dialog';
+import { Calendar } from "@/components/ui/calendar";
+import { useAuth } from "@/contexts/AuthContext";
+import { db } from "@/firebase/firebase";
+import { Opportunity } from "@/types/opportunity";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { CalendarIcon, Clock, FileText, Lightbulb, Plus } from "lucide-react";
+import { FormEvent, useState } from "react";
+import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
-  SelectLabel,
-} from './ui/select';
-import { Label } from './ui/label';
-import { OpportunityRecord } from '@/types/opportunity';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { FormEvent, useState } from 'react';
-import { Calendar } from '@/components/ui/calendar';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
-import { DialogClose } from '@radix-ui/react-dialog';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/firebase/firebase';
-import { useAuth } from '@/contexts/AuthContext';
+} from "./ui/select";
+import { Textarea } from "./ui/textarea";
 
-export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
+export const LogHours = ({
+  opportunities,
+}: {
+  opportunities: Opportunity[];
+}) => {
   const { registerUser } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [hours, setHours] = useState('');
-  const [opportunity, setOpportunity] = useState('');
-  const [description, setDescription] = useState('');
-  const [reflection, setReflection] = useState('');
+  const [hours, setHours] = useState("");
+  const [opportunity, setOpportunity] = useState("");
+  const [description, setDescription] = useState("");
+  const [reflection, setReflection] = useState("");
 
   const saveVolunteerLogs = async (e: FormEvent) => {
     e.preventDefault();
 
-    await addDoc(collection(db, 'volunteer_logs'), {
+    await addDoc(collection(db, "volunteer_logs"), {
       userId: registerUser?.uid,
       date,
       description,
@@ -45,11 +55,11 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
       createdAt: serverTimestamp(),
     });
 
-    setHours('');
+    setHours("");
     setDate(undefined);
-    setOpportunity('');
-    setDescription('');
-    setReflection('');
+    setOpportunity("");
+    setDescription("");
+    setReflection("");
     setDialogOpen(false);
   };
 
@@ -74,9 +84,9 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Opportunities</SelectLabel>
-                  {records.map((record) => (
-                    <SelectItem key={record.id} value={record.fields.Title}>
-                      {record.fields.Title}
+                  {opportunities.map((opportunity) => (
+                    <SelectItem key={opportunity.id} value={opportunity.title}>
+                      {opportunity.title}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -93,8 +103,12 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
                 </div>
                 <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" id="date" className="w-48 justify-between">
-                      {date ? date.toLocaleDateString() : 'Select Date'}
+                    <Button
+                      variant="outline"
+                      id="date"
+                      className="w-48 justify-between"
+                    >
+                      {date ? date.toLocaleDateString() : "Select Date"}
                       <CalendarIcon />
                     </Button>
                   </PopoverTrigger>
@@ -116,7 +130,11 @@ export const LogHours = ({ records }: { records: OpportunityRecord[] }) => {
                   <Clock size={18} />
                   <Label className="px-1">Hours Logged</Label>
                 </div>
-                <Input type="number" onChange={(e) => setHours(e.target.value)} required />
+                <Input
+                  type="number"
+                  onChange={(e) => setHours(e.target.value)}
+                  required
+                />
               </div>
             </div>
 
