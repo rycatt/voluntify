@@ -1,7 +1,14 @@
 import { db } from "@/firebase/firebase";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { addDoc, collection } from "firebase/firestore";
-import { CalendarIcon, FileText } from "lucide-react";
+import {
+  CalendarIcon,
+  Clock,
+  FileText,
+  MapPin,
+  Tag,
+  Users,
+} from "lucide-react";
 import React, { FormEvent, useState } from "react";
 import { Button } from "./ui/button";
 import { Calendar } from "./ui/calendar";
@@ -66,7 +73,10 @@ export const CreateOpportunity = () => {
         </DialogHeader>
         <form onSubmit={handleOpportunityCreation} className="space-y-6">
           <div>
-            <Label>Event Title</Label>
+            <div className="flex items-center text-gray-600 mb-2 my-4">
+              <Tag size={18} />
+              <Label className="px-1">Event Title</Label>
+            </div>
             <Input
               type="text"
               value={title}
@@ -76,7 +86,10 @@ export const CreateOpportunity = () => {
             />
           </div>
           <div>
-            <Label>Organization</Label>
+            <div className="flex items-center text-gray-600 mb-2 my-4">
+              <Users size={18} />
+              <Label className="px-1">Organization</Label>
+            </div>
             <Input
               type="text"
               value={organization}
@@ -101,7 +114,7 @@ export const CreateOpportunity = () => {
             />
           </div>
 
-          <div className="grid grid-cols-2 items-center gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col">
               <Label
                 htmlFor="date"
@@ -116,6 +129,7 @@ export const CreateOpportunity = () => {
                     variant="outline"
                     id="date"
                     className="justify-between"
+                    type="button"
                   >
                     {date ? date.toLocaleDateString() : "Select Date"}
                     <CalendarIcon size={16} />
@@ -130,25 +144,39 @@ export const CreateOpportunity = () => {
                       setDate(selectedDate ?? undefined);
                       setCalendarOpen(false);
                     }}
+                    disabled={(date) => date < new Date()}
                   />
                 </PopoverContent>
               </Popover>
             </div>
 
-            <div className="flex flex-col">
-              <Label htmlFor="location" className="mb-2 text-gray-600">
-                Location
-              </Label>
+            <div>
+              <div className="flex items-center text-gray-600 mb-2">
+                <MapPin size={18} />
+                <Label htmlFor="location" className="px-1">
+                  Location
+                </Label>
+              </div>
               <Input
                 id="location"
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 required
+                placeholder="e.g. Central Park, NYC"
+                maxLength={100}
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label>Start Time</Label>
+              <div className="flex items-center text-gray-600 mb-2">
+                <Clock size={18} />
+                <Label htmlFor="location" className="px-1">
+                  Start Time
+                </Label>
+              </div>
               <Input
                 type="time"
                 value={startTime}
@@ -157,7 +185,12 @@ export const CreateOpportunity = () => {
               />
             </div>
             <div>
-              <Label>End Time</Label>
+              <div className="flex items-center text-gray-600 mb-2">
+                <Clock size={18} />
+                <Label htmlFor="location" className="px-1">
+                  End Time
+                </Label>
+              </div>
               <Input
                 type="time"
                 value={endTime}
@@ -166,10 +199,12 @@ export const CreateOpportunity = () => {
               />
             </div>
           </div>
+
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Max Participants
-            </label>
+            <div className="flex items-center text-gray-600 mb-2 my-4">
+              <Users size={18} />
+              <Label className="px-1">Max Participants</Label>
+            </div>
             <input
               type="number"
               value={maxParticipants}
